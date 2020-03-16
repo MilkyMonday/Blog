@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Dashboard Template for Bootstrap</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet"
+    >
+
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <link href="../../assets/css/ie10-viewport-bug-workaround.css" rel="stylesheet"
+          th:href="@{/assets/css/ie10-viewport-bug-workaround.css}">
+
+    <!-- Custom styles for this template -->
+    <link href=" ..
+    /../static/examples/dashboard.css" rel="stylesheet"
+          th:href="@{/examples/dashboard.css}">
+
+    <!--[if lt IE 9]>
+    <script src="../../assets/js/ie8-responsive-file-warning.js"
+            th:src="@{/assets/js/ie8-responsive-file-warning.js}"></script><![endif]-->
+    <script src="../../assets/js/ie-emulation-modes-warning.js"
+            th:src="@{/assets/js/ie-emulation-modes-warning.js}"></script>
+
+    <!--[if lt IE 9]>
+    <script src="https://cdn.bootcss.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="https://cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+
+<body>
+
+<nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar"
+                    aria-expanded="false" aria-controls="navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" th:href="@{/admin}">My Blog 控制台</a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+            <ul class="nav navbar-nav navbar-right">
+                <li><a th:href="@{/}">回到博客</a></li>
+                <li><a th:text="'你好，'+${session.USER_SESSION.getNickname()}">你好，XXX</a></li>
+                <li><a th:href="@{/admin/logout}">注销</a></li>
+            </ul>
+            <form class="navbar-form navbar-right">
+                <input type="text" class="form-control" placeholder="Search...">
+            </form>
+        </div>
+    </div>
+</nav>
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-3 col-md-2 sidebar">
+            <ul class="nav nav-sidebar">
+                <li><a th:href="@{/admin/blogs/list}">博客管理<span class="sr-only">(current)</span></a></li>
+                <li class="active"><a th:href="@{/admin/types/list}">分类管理</a></li>
+                <li><a th:href="@{/admin/comments/list}">评论管理</a></li>
+                <li><a href="#">用户管理</a></li>
+            </ul>
+        </div>
+        <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+            <h1 class="page-header">分类列表</h1>
+            <div class="table-responsive">
+                <form th:action="@{/admin/types/save}">
+                    <table class="table table-striped">
+                        <tr>分类名</tr>
+                        <tr>
+                            <input type="text" name="name">&nbsp;&nbsp;&nbsp;
+                        </tr>
+                        <tr>
+                            <button type="submit" class="btn btn-info" >新增</button>
+                        </tr>
+                    </table>
+                </form>
+
+                    <table class="table table-striped">
+                        <thead>
+                        <tr>
+                            <th>编号</th>
+                            <th>分类</th>
+                            <th>操作</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="type:${page.getContent()}">
+                            <form th:action="@{/admin/types/update}">
+                            <input type="hidden" name="id" th:value="${type.id}">
+                            <td th:text="${type.id}">id</td>
+                            <td><input type="text" th:value="${type.name}" name="name"></td>
+                            <td>
+                                <button class="btn btn-warning" type="submit">修改</button>
+                                <a class="btn btn-danger"th:href="@{/admin/types/delete/{id}(id=${type.id})}">删除</a>
+                            </td>
+                            </form>
+                        </tr>
+                        </tbody>
+                    </table>
+
+                <p>
+                    <a th:href="@{/admin/types/list}" th:unless="${page.isFirst()}">首页</a>
+                    <a th:href="@{/admin/types/list(page=${page.getNumber()}-1)}"th:if="${page.hasPrevious()}">上一页</a>
+                    当前<span th:text="${page.getNumber()} + 1"></span>页,总<span
+                        th:text="${page.getTotalPages()}"></span>页
+                    共<span th:text="${page.getTotalElements()}"></span>条记录
+                    <a th:href="@{/admin/types/list(page=${page.getNumber()}+1)}" th:if="${page.hasNext()}"
+                       }>下一页</a>
+                    <a th:href="@{/admin/types/list(page=${page.totalPages}-1)}" th:unless="${page.isLast()}">尾页</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<script src=" https://cdn.bootcss.com/jquery/1.12.4/jquery.min.js"></script>
+<script src = "../../assets/js/vendor/jquery.min.js" th:src = "@{/assets/js/vendor/jquery.min.js}"></script>
+<script src="../../assets/js/vendor/holder.min.js" th:src="@{/assets/js/vendor/holder.min.js}"></script>
+<script src="../../assets/js/ie10-viewport-bug-workaround.js" th:src="@{/assets/js/ie10-viewport-bug-workaround.js}"></script>
+</body>
+</html>
